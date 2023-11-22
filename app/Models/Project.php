@@ -27,12 +27,4 @@ final class Project extends Model
             foreignKey: 'user_id',
         );
     }
-
-    public function applications(): HasMany
-    {
-        return $this->hasMany(
-            related: Application::class,
-            foreignKey: 'project_id',
-        );
-    }
 }

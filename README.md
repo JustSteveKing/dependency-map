@@ -5,5 +5,5 @@
 - Vendor (name: laravel)
 - Package (name: laravel)
 - Version (version: 10.8.0)
-- Advisory: (name: Ooops something is insecure)
+- Advisory: (name: Oops something is insecure)
 - Maintainer: (name: Dries Vints)

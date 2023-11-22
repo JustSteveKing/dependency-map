@@ -14,11 +14,11 @@ final class SecurityAdvisories extends Request
     public function __construct(
         private readonly string $vendor,
         private readonly string $package,
-        private readonly string $timestamp,
-    ) {}
+    ) {
+    }
 
     public function resolveEndpoint(): string
     {
-        return "https://packagist.org/api/security-advisories/?updatedSince=[{$this->timestamp}]&packages[]=[{$this->vendor}/{$this->package}]";
+        return "/api/security-advisories/packages[]=[{$this->vendor}/{$this->package}]";
     }
 }

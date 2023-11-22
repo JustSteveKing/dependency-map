@@ -18,6 +18,6 @@ final class PackageStatistics extends Request
 
     public function resolveEndpoint(): string
     {
-        return "https://packagist.org/packages/{$this->vendor}/{$this->package}/stats.json";
+        return "/packages/{$this->vendor}/{$this->package}/stats.json";
     }
 }

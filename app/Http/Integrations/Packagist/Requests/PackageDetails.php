@@ -14,7 +14,8 @@ final class PackageDetails extends Request
     public function __construct(
         private readonly string $vendor,
         private readonly string $package,
-    ) {}
+    ) {
+    }
 
     public function resolveEndpoint(): string
     {

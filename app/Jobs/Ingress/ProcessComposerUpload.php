@@ -29,7 +29,7 @@ final class ProcessComposerUpload implements ShouldQueue
 
     public function handle(IngressService $service, Dispatcher $bus): void
     {
-        $service->ensureApplication(
+        $application = $service->ensureApplication(
             project: $this->project,
             payload: $this->composer,
         );
@@ -38,6 +38,7 @@ final class ProcessComposerUpload implements ShouldQueue
             $bus->dispatch(
                 command: new FetchPackageInsights(
                     name: $package->package,
+                    application: $application->getKey(),
                 ),
             );
         }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs\Packagist;
 
+use App\DTOs\AdvisoryObject;
 use App\DTOs\PackageObject;
 use App\Http\Integrations\Packagist\PackagistConnector;
 use App\Http\Integrations\Packagist\Requests\PackageDetails;
@@ -29,6 +30,7 @@ final class FetchPackageInsights implements ShouldQueue
 
     public function __construct(
         public readonly string $name,
+        public readonly string $application,
     ) {
     }
 
@@ -63,6 +65,8 @@ final class FetchPackageInsights implements ShouldQueue
             vendor: $vendorModel->id,
         );
 
+        $packageModel->applications()->attach($this->application);
+
         $stats = PackagistConnector::stats();
         $statsResponse = $stats->send(
             request: new PackageStatistics(
@@ -89,9 +93,16 @@ final class FetchPackageInsights implements ShouldQueue
         );
 
         foreach ($advisories->json('advisories') as $package => $advisories) {
-
+            foreach ($advisories as $advisory) {
+                $bus->dispatch(
+                    command: new RegisterAdvisory(
+                        package: $packageModel->getKey(),
+                        advisory: AdvisoryObject::fromArray(
+                            data: $advisory,
+                        ),
+                    ),
+                );
+            }
         }
-
-        dd($advisories->json());
     }
 }

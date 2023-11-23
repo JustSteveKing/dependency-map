@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTOs\AdvisoryObject;
 use App\DTOs\PackageObject;
 use App\Http\Payloads\ComposerJson;
+use App\Models\Advisory;
 use App\Models\Application;
 use App\Models\Package;
 use App\Models\Project;
@@ -67,6 +69,20 @@ final readonly class IngressService
                     'vendor_id' => $vendor,
                 ],
                 values: $payload->toArray(),
+            ),
+            attempts: 3,
+        );
+    }
+
+    public function ensureAdvisory(string $package, AdvisoryObject $advisory): Advisory|Model
+    {
+        return $this->database->transaction(
+            callback: fn () => Advisory::query()->updateOrCreate(
+                attributes: [
+                    'identifier' => $advisory->identifier,
+                    'package_id' => $package,
+                ],
+                values: $advisory->toArray(),
             ),
             attempts: 3,
         );

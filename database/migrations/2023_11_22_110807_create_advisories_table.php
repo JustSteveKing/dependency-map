@@ -17,10 +17,10 @@ return new class () extends Migration {
             $table->string('remote'); // remote identifier
             $table->string('title');
             $table->string('link');
-            $table->string('cve');
+            $table->string('cve')->nullable();
             $table->string('versions');
             $table->string('source');
-            $table->string('severity');
+            $table->string('severity')->nullable();
 
             $table
                 ->foreignUlid('package_id')

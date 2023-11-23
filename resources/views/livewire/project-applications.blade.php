@@ -12,17 +12,17 @@
                             <div class="h-2 w-2 rounded-full bg-current"></div>
                         </div>
                         <h2 class="min-w-0 text-sm font-semibold leading-6">
-{{--                            <a wire:navigate href="{{ route('pages:projects:show', ['project' => $project]) }}" class="flex gap-x-2">--}}
-{{--                                <span class="truncate">{{ $project->name }}</span>--}}
-{{--                            </a>--}}
+                            <a wire:navigate href="{{ route('pages:applications:show', ['application' => $application]) }}" class="flex gap-x-2">
+                                <span class="truncate">{{ $application->name }}</span>
+                            </a>
                         </h2>
                     </div>
                     <div class="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
-                        <p class="truncate">Dependencies updated</p>
+                        <p class="truncate">Dependency map updated</p>
                         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 flex-none fill-gray-300">
                             <circle cx="1" cy="1" r="1"></circle>
                         </svg>
-{{--                        <p class="whitespace-nowrap">{{ $project->updated_at->diffForHumans() }}</p>--}}
+                        <p class="whitespace-nowrap">{{ $application->updated_at->diffForHumans() }}</p>
                     </div>
                 </div>
                 <div class="rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset text-gray-400 bg-gray-400/10 ring-gray-400/20">Preview</div>

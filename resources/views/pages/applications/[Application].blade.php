@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 \Laravel\Folio\middleware(['auth']);
 
-\Laravel\Folio\name('pages:projects:show'); ?>
+\Laravel\Folio\name('pages:applications:show'); ?>
 
-<x-page :title="$project->name">
+<x-page :title="$application->name">
     <section>
         <header>
             <div class="flex flex-col items-start justify-between gap-x-8 gap-y-4 bg-gray-200/10 dark:bg-gray-700/10 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
@@ -16,11 +16,11 @@ declare(strict_types=1);
                             <div class="h-2 w-2 rounded-full bg-current"></div>
                         </div>
                         <h1 class="flex gap-x-3 text-base leading-7">
-                            <span class="font-semibold text-black dark:text-white">{{ $project->name }}</span>
+                            <span class="font-semibold text-black dark:text-white">{{ $application->name }}</span>
                         </h1>
                     </div>
                     <p class="mt-2 text-xs leading-6">
-                        Last checked {{ $project->updated_at->diffForHumans() }}
+                        Last checked {{ $application->updated_at->diffForHumans() }}
                     </p>
                 </div>
                 <div class="order-first flex-none rounded-full bg-indigo-400/10 px-2 py-1 text-xs font-medium text-indigo-400 ring-1 ring-inset ring-indigo-400/30 sm:order-none">
@@ -30,39 +30,43 @@ declare(strict_types=1);
 
             <div class="grid grid-cols-1 bg-gray-200/10 dark:bg-gray-700/10 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="border-t border-black/5 dark:border-white/5 py-6 px-4 sm:px-6 lg:px-8 ">
-                    <p class="text-sm font-medium leading-6">Number of application</p>
+                    <p class="text-sm font-medium leading-6">Number of Dependencies</p>
                     <p class="mt-2 flex items-baseline gap-x-2">
                         <span class="text-4xl font-semibold tracking-tight text-black dark:text-white">
-                            {{ $project->applications->count() }}
+                            {{ $application->packages->count() }}
                         </span>
                     </p>
                 </div>
                 <div class="border-t border-black/5 dark:border-white/5 py-6 px-4 sm:px-6 lg:px-8 sm:border-l">
-                    <p class="text-sm font-medium leading-6">Total Dependencies</p>
+                    <p class="text-sm font-medium leading-6">Number of Authors</p>
                     <p class="mt-2 flex items-baseline gap-x-2">
                         <span class="text-4xl font-semibold tracking-tight text-black dark:text-white">
-                            1
+                            {{ count($application->composer['authors']) }}
                         </span>
                     </p>
                 </div>
                 <div class="border-t border-black/5 dark:border-white/5 py-6 px-4 sm:px-6 lg:px-8 lg:border-l">
-                    <p class="text-sm font-medium leading-6">Number of servers</p>
+                    <p class="text-sm font-medium leading-6">License</p>
                     <p class="mt-2 flex items-baseline gap-x-2">
-                        <span class="text-4xl font-semibold tracking-tight text-black dark:text-white">3</span>
+                        <span class="text-4xl font-semibold tracking-tight text-black dark:text-white">
+                            {{ $application->composer['license'] }}
+                        </span>
                     </p>
                 </div>
                 <div class="border-t border-black/5 dark:border-white/5 py-6 px-4 sm:px-6 lg:px-8 sm:border-l">
-                    <p class="text-sm font-medium leading-6">Success rate</p>
+                    <p class="text-sm font-medium leading-6">Stability</p>
                     <p class="mt-2 flex items-baseline gap-x-2">
-                        <span class="text-4xl font-semibold tracking-tight text-black dark:text-white">98.5%</span>
+                        <span class="text-4xl font-semibold tracking-tight text-black dark:text-white">
+                            {{ $application->composer['stability'] }}
+                        </span>
                     </p>
                 </div>
 
             </div>
         </header>
 
-        <livewire:project-applications
-            :project="$project"
+        <livewire:applications.package-list
+            :application="$application"
         />
     </section>
 </x-page>

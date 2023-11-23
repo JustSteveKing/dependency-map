@@ -19,7 +19,9 @@ final class ProjectApplications extends Component
         return $factory->make(
             view: 'livewire.project-applications',
             data: [
-                'applications' => Application::query()->where(
+                'applications' => Application::query()->with([
+                    'project'
+                ])->where(
                     'project_id',
                     $this->project->getKey(),
                 )->paginate(),

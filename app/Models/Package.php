@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Collection<Version> $versions
  * @property Collection<Advisory> $advisories
  * @property Collection<Application> $applications
+ * @property Collection<Maintainer> $maintainers
  */
 final class Package extends Model
 {
@@ -99,6 +100,14 @@ final class Package extends Model
         return $this->belongsToMany(
             related: Application::class,
             table: 'application_package',
+        );
+    }
+
+    public function maintainers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: Maintainer::class,
+            table: 'maintainer_package',
         );
     }
 }

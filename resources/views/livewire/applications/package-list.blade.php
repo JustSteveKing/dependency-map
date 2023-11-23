@@ -4,11 +4,17 @@
             <li class="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
                 <div class="min-w-0 flex-auto">
                     <div class="flex items-center gap-x-3">
-                        <div class="flex-none rounded-full p-1 bg-gray-800/10 dark:bg-gray-100/10">
-                            <div class="h-2 w-2 rounded-full bg-current"></div>
-                        </div>
+                        @if ($package->advisories->count())
+                            <div class="flex-none rounded-full p-1 bg-red-800/10 dark:bg-red-100/10">
+                                <div class="h-2 w-2 rounded-full bg-red-600/70 dark:bg-red-300/70"></div>
+                            </div>
+                        @else
+                            <div class="flex-none rounded-full p-1 bg-green-800/10 dark:bg-green-100/10">
+                                <div class="h-2 w-2 rounded-full bg-green-600/70 dark:bg-green-300/70"></div>
+                            </div>
+                        @endif
                         <h2 class="min-w-0 text-sm font-semibold leading-6 text-black dark:text-white">
-                            <a href="#" class="flex gap-x-2">
+                            <a wire:navigate href="{{ route('pages:packages:show', ['package' => $package]) }}" class="flex gap-x-2">
                                 <span class="truncate">{{ $package->name }}</span>
                                 <span class="absolute inset-0"></span>
                             </a>

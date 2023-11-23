@@ -65,6 +65,14 @@ final class FetchPackageInsights implements ShouldQueue
             vendor: $vendorModel->id,
         );
 
+        foreach ($package->authors as $author) {
+            $maintainer = $service->ensureMaintainer(
+                maintainer: $author,
+            );
+
+            $packageModel->maintainers()->attach($maintainer->id);
+        }
+
         $packageModel->applications()->attach($this->application);
 
         $stats = PackagistConnector::stats();

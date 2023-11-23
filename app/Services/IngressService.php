@@ -9,6 +9,7 @@ use App\DTOs\PackageObject;
 use App\Http\Payloads\ComposerJson;
 use App\Models\Advisory;
 use App\Models\Application;
+use App\Models\Maintainer;
 use App\Models\Package;
 use App\Models\Project;
 use App\Models\Vendor;
@@ -88,11 +89,34 @@ final readonly class IngressService
         );
     }
 
+    public function ensureMaintainer(array $maintainer): Maintainer|Model
+    {
+        return $this->database->transaction(
+            callback: fn () => Maintainer::query()->updateOrCreate(
+                attributes: [
+                    'name' => $maintainer['name'],
+                ],
+                values: [
+                    'email' => $maintainer['email'] ?? null,
+                    'url' => $maintainer['homepage'] ?? null,
+                ],
+            ),
+        );
+    }
+
     public function ignoredPackages(): array
     {
         return [
             'php',
-            'ext-',
+            'ext-json',
+            'ext-ctype',
+            'ext-filter',
+            'ext-hash',
+            'ext-mbstring',
+            'ext-openssl',
+            'ext-session',
+            'ext-tokenizer',
+            'composer-runtime-api',
         ];
     }
 }

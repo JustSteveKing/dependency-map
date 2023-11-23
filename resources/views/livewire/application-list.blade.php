@@ -1,7 +1,7 @@
 <ul role="list" class="-mx-2 mt-2 space-y-1">
     @forelse ($applications as $application)
         <li>
-            <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+            <a wire:navigate href="{{ route('pages:applications:show', ['application' => $application]) }}" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                 <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600">H</span>
                 <span class="truncate">{{ $application->name }}</span>
             </a>

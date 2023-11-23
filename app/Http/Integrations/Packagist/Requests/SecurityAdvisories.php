@@ -19,6 +19,6 @@ final class SecurityAdvisories extends Request
 
     public function resolveEndpoint(): string
     {
-        return "/api/security-advisories/packages[]=[{$this->vendor}/{$this->package}]";
+        return "/api/security-advisories/?packages[]={$this->vendor}/{$this->package}";
     }
 }

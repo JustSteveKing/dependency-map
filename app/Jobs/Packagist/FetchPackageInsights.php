@@ -7,13 +7,18 @@ namespace App\Jobs\Packagist;
 use App\DTOs\PackageObject;
 use App\Http\Integrations\Packagist\PackagistConnector;
 use App\Http\Integrations\Packagist\Requests\PackageDetails;
+use App\Http\Integrations\Packagist\Requests\PackageStatistics;
+use App\Http\Integrations\Packagist\Requests\SecurityAdvisories;
 use App\Services\IngressService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
+
+use function in_array;
 
 final class FetchPackageInsights implements ShouldQueue
 {
@@ -27,9 +32,9 @@ final class FetchPackageInsights implements ShouldQueue
     ) {
     }
 
-    public function handle(IngressService $service): void
+    public function handle(IngressService $service, Dispatcher $bus): void
     {
-        if (\in_array($this->name, $service->ignoredPackages())) {
+        if (in_array($this->name, $service->ignoredPackages())) {
             return;
         }
 
@@ -52,15 +57,41 @@ final class FetchPackageInsights implements ShouldQueue
             name: $vendor
         );
 
-        $packageModel =$service->ensurePackage(
+        $packageModel = $service->ensurePackage(
             payload: $package,
             repo: $repo,
             vendor: $vendorModel->id,
         );
 
+        $stats = PackagistConnector::stats();
+        $statsResponse = $stats->send(
+            request: new PackageStatistics(
+                vendor: $vendor,
+                package: $repo,
+            ),
+        );
 
-        // register versions
-        // get stats
-        // get downloads
+        $packageModel->update([
+            'total_downloads' => $statsResponse->json('downloads.total'),
+            'monthly_downloads' => $statsResponse->json('downloads.monthly'),
+            'daily_downloads' => $statsResponse->json('downloads.daily'),
+        ]);
+
+        $statsResponse->collect('versions')->map(fn (string $version) => $packageModel->versions()->updateOrCreate([
+            'name' => $version,
+        ]));
+
+        $advisories = $stats->send(
+            request: new SecurityAdvisories(
+                vendor: $vendor,
+                package: $repo,
+            ),
+        );
+
+        foreach ($advisories->json('advisories') as $package => $advisories) {
+
+        }
+
+        dd($advisories->json());
     }
 }

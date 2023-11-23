@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Enums\License;
+use App\Enums\Type;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +18,9 @@ return new class () extends Migration {
             $table->string('key');
             $table->string('description')->nullable();
             $table->string('homepage')->nullable();
-            $table->string('license');
+            $table->string('license')->default(License::Unknown->value);
             $table->string('source');
-            $table->string('type');
+            $table->string('type')->default(Type::Library->value);
 
             $table->json('keywords')->nullable();
             $table->json('required')->nullable();

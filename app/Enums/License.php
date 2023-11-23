@@ -16,4 +16,6 @@ enum License: string
     case Lgpl_3 = 'LGPL-3.0-only';
     case Mit = 'MIT';
     case Proprietary = 'Proprietary';
+
+    case Unknown = 'unknown';
 }
